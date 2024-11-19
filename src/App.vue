@@ -35,17 +35,19 @@ const pending = ref(false);
  */
 const onScroll = async (event: Event) => {
 
-  if (pending.value) return
+  if (pending.value || !users.value) return
 
   const target = event.target as HTMLDivElement;
   const height = +(target.scrollHeight - target.scrollTop).toFixed()
 
-  if ([height, height + 1, height - 1].includes(event.target.clientHeight)) {
+  if ([height, height + 1, height - 1].includes(target.clientHeight)) {
     pending.value = true
     try {
       const data = await api.getUsers(users.value.info.page + 1)
       users.value.results.push(...data.results)
       users.value.info.page++
+    } catch (e) {
+      console.error(e)
     } finally {
       pending.value = false
     }
@@ -66,6 +68,8 @@ const onScroll = async (event: Event) => {
 onMounted(() => {
   api.getUsers().then((data) => {
     users.value = data
+  }).catch((err) => {
+    console.log(err)
   })
 })
 
@@ -82,7 +86,7 @@ onMounted(() => {
         <template v-if="users">
           <UserCard
               v-for="user of users.results"
-              :key="user.ud"
+              :key="user.id.value"
               :fullName="`${user.name.first} ${user.name.last}`"
               :media="user.picture.medium"
               :email="user.email"

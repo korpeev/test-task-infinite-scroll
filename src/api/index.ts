@@ -17,14 +17,9 @@ class Api {
 	 * The results are limited to 10 users per request. In case of an error,
 	 * it catches the error and logs it to the console.
 	 */
-	public async getUsers(page = 1, results = 10): Promise<ApiResponse> {
-		try {
-			const response = await fetch(`${this.url}?page=${page}&results=${results}`);
-			const data = await response.json() as Promise<ApiResponse>;
-			return data
-		} catch(error) {
-			console.log(error);
-		}
+	public async getUsers(page = 1, results = 10) {
+		const response = await fetch(`${this.url}?page=${page}&results=${results}`);
+		return await response.json() as Promise<ApiResponse>
 	}
 }
 

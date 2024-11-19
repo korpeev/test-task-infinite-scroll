@@ -14,7 +14,7 @@ const props = defineProps<Props>()
     <img class="rounded" :src="props.media" alt="picture">
     <div class="flex flex-col gap-2">
       <span>{{ props.fullName }}</span>
-      <a class="font-semibold" :href="`mailto:${props.mail}`">{{ props.email }}</a>
+      <a class="font-semibold" :href="`mailto:${props.email}`">{{ props.email }}</a>
     </div>
   </li>
 </template>
